@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.todojetpackcompose.data.api.AuthService
+import com.example.todojetpackcompose.data.repository.AuthRepositoryImpl
+import com.example.todojetpackcompose.domain.use_case.LoginUseCase
+import com.example.todojetpackcompose.presentation.login.LoginView
+import com.example.todojetpackcompose.presentation.login.LoginViewModel
 import com.example.todojetpackcompose.presentation.theme.TodoJetpackComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,30 +19,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TodoJetpackComposeTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val loginViewModel = LoginViewModel(
+                        loginUseCase = LoginUseCase(
+                            repository = AuthRepositoryImpl(
+                                authService = AuthService.create()!!
+                            )
+                        )
+                    )
+
+                    LoginView(loginViewModel)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TodoJetpackComposeTheme {
-        Greeting("Android")
     }
 }
