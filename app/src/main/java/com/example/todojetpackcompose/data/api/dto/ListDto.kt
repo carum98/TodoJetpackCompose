@@ -1,6 +1,6 @@
 package com.example.todojetpackcompose.data.api.dto
 
-import com.example.todojetpackcompose.domain.model.List
+import com.example.todojetpackcompose.domain.model.List as ListModel
 
 data class ListDto(
     val id: Int,
@@ -8,8 +8,12 @@ data class ListDto(
     val color: String,
 )
 
-fun ListDto.toList(): List {
-    return List(
+data class ListDataDto(
+    val data: List<ListDto>
+)
+
+fun ListDto.toList(): ListModel {
+    return ListModel(
         id = id,
         name = name,
         color = color,
