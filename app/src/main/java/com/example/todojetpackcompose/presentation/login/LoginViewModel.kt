@@ -5,12 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todojetpackcompose.common.Resource
+import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import com.example.todojetpackcompose.domain.use_case.LoginUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val authenticationService: AuthenticationService
 ) : ViewModel() {
     private val _state = mutableStateOf(LoginState())
     val state get() = _state.value
@@ -37,6 +39,10 @@ class LoginViewModel(
                 is Resource.Success -> {
                     _state.value = state.copy(isLoading = false)
                     Log.d("LoginViewModel", "Successfully logged in: ${result.data}")
+
+                    result.data?.let {
+                        authenticationService.store(it.token)
+                    }
                 }
                 is Resource.Error -> {
                     _state.value = state.copy(isLoading = false)

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.todojetpackcompose"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.todojetpackcompose"
@@ -77,4 +77,10 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.0")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
