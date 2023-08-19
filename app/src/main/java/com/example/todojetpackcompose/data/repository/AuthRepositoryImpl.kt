@@ -5,8 +5,9 @@ import com.example.todojetpackcompose.data.api.dto.AuthDtoRequest
 import com.example.todojetpackcompose.data.api.dto.toAuth
 import com.example.todojetpackcompose.domain.model.Auth
 import com.example.todojetpackcompose.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService
 ) : AuthRepository {
     override suspend fun login(username: String, password: String): Auth {

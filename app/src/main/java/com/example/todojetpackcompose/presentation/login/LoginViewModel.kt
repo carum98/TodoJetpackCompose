@@ -7,10 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.todojetpackcompose.common.Resource
 import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import com.example.todojetpackcompose.domain.use_case.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val authenticationService: AuthenticationService
 ) : ViewModel() {

@@ -6,8 +6,9 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import javax.inject.Inject
 
-class AuthInterceptor(
+class AuthInterceptor @Inject constructor(
     private val authenticationService: AuthenticationService
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking(Dispatchers.IO) {
@@ -26,7 +27,7 @@ class AuthInterceptor(
     }
 }
 
-class NoAuthInterceptor(
+class NoAuthInterceptor @Inject constructor(
     private val authenticationService: AuthenticationService
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking(Dispatchers.IO) {

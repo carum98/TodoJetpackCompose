@@ -10,18 +10,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import com.example.todojetpackcompose.data.datastore.AuthenticationService.Companion.datastore
 import com.example.todojetpackcompose.presentation.lists.ListsView
-import com.example.todojetpackcompose.presentation.lists.ListsViewModel
 import com.example.todojetpackcompose.presentation.login.LoginView
-import com.example.todojetpackcompose.presentation.login.LoginViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun AppNavigation(
-    loginViewModel: LoginViewModel,
-    listsViewModel: ListsViewModel
-) {
+fun AppNavigation() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -41,15 +36,11 @@ fun AppNavigation(
 
     NavHost(navController = navController, startDestination = AppScreen.Login.route) {
         composable(AppScreen.Login.route) {
-            LoginView(
-                loginViewModel = loginViewModel
-            )
+            LoginView()
         }
 
         composable(AppScreen.Lists.route) {
-            ListsView(
-                listsViewModel = listsViewModel,
-            )
+            ListsView()
         }
     }
 }

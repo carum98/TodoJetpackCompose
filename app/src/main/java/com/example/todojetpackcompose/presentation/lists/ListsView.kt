@@ -15,28 +15,37 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListsView(
-    listsViewModel: ListsViewModel,
+    listsViewModel: ListsViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val state = listsViewModel.state.value
+
+    // Get lists
+    LaunchedEffect(null) {
+        println("Get lists")
+        listsViewModel.onEvent(ListEvent.GetLists)
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("My App")
+                    Text("ToDo App")
                 },
                 actions = {
                     IconButton(onClick = {
                         scope.launch {
+                            listsViewModel.logout()
                         }
                     }) {
                         Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = "Más")

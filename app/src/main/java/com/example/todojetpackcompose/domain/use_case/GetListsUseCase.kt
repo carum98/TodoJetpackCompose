@@ -4,9 +4,10 @@ import com.example.todojetpackcompose.common.Resource
 import com.example.todojetpackcompose.domain.repository.ListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 import com.example.todojetpackcompose.domain.model.List as ListModel
 
-class GetListsUseCase(
+class GetListsUseCase @Inject constructor(
     private val listRepository: ListRepository
 ) {
     operator fun invoke(): Flow<Resource<List<ListModel>>> = flow {
