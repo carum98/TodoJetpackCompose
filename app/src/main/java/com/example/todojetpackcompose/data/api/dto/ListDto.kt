@@ -16,6 +16,6 @@ fun ListDto.toList(): ListModel {
     return ListModel(
         id = id,
         name = name,
-        color = color,
+        colorHexadecimal = color,
     )
 }

@@ -40,7 +40,14 @@ fun AppNavigation() {
         }
 
         composable(AppScreen.Lists.route) {
-            ListsView()
+            ListsView(
+                onAddList = {
+                    println("Add list")
+                },
+                onOpenList = {
+                    println("Open list $it")
+                }
+            )
         }
     }
 }
