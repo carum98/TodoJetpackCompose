@@ -4,13 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import com.example.todojetpackcompose.data.datastore.AuthenticationService.Companion.datastore
 import com.example.todojetpackcompose.presentation.lists.ListsView
 import com.example.todojetpackcompose.presentation.login.LoginView
+import com.example.todojetpackcompose.presentation.todos.TodoView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -45,7 +48,21 @@ fun AppNavigation() {
                     println("Add list")
                 },
                 onOpenList = {
-                    println("Open list $it")
+                    navController.navigate(AppScreen.Todo.route + "/$it")
+                }
+            )
+        }
+
+        composable(
+            AppScreen.Todo.route + "/{listId}",
+            arguments = listOf(navArgument("listId") { type = NavType.IntType })
+        ) {
+            TodoView(
+                onBack = {
+                    navController.popBackStack()
+                },
+                onAddTodo = {
+                    println("Add todo")
                 }
             )
         }

@@ -4,10 +4,13 @@ import com.example.todojetpackcompose.data.api.AuthInterceptor
 import com.example.todojetpackcompose.data.api.AuthService
 import com.example.todojetpackcompose.data.api.ListService
 import com.example.todojetpackcompose.data.api.NoAuthInterceptor
+import com.example.todojetpackcompose.data.api.TodoService
 import com.example.todojetpackcompose.data.repository.AuthRepositoryImpl
 import com.example.todojetpackcompose.data.repository.ListRepositoryImpl
+import com.example.todojetpackcompose.data.repository.TodoRepositoryImpl
 import com.example.todojetpackcompose.domain.repository.AuthRepository
 import com.example.todojetpackcompose.domain.repository.ListRepository
+import com.example.todojetpackcompose.domain.repository.TodoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,6 +53,13 @@ class AppModule {
         return retrofit.create(ListService::class.java)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideTodoService(retrofit: Retrofit): TodoService {
+        return retrofit.create(TodoService::class.java)
+    }
+
     @Provides
     @Singleton
     fun provideListRepository(listService: ListService): ListRepository {
@@ -60,5 +70,11 @@ class AppModule {
     @Singleton
     fun provideAuthRepository(authService: AuthService): AuthRepository {
         return AuthRepositoryImpl(authService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTodoRepository(todoService: TodoService): TodoRepository {
+        return TodoRepositoryImpl(todoService)
     }
 }

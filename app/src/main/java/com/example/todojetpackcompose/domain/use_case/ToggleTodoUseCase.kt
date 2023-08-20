@@ -1,9 +1,12 @@
 package com.example.todojetpackcompose.domain.use_case
 
 import com.example.todojetpackcompose.domain.repository.TodoRepository
+import javax.inject.Inject
 
-class GetTodos(
+class ToggleTodoUseCase @Inject constructor(
     private val todoRepository: TodoRepository
 ) {
-    suspend operator fun invoke(listId: Int) = todoRepository.getTodos(listId)
+    suspend operator fun invoke(todoId: Int) {
+        todoRepository.toggleTodoComplete(todoId)
+    }
 }

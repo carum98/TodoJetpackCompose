@@ -4,4 +4,5 @@ import com.example.todojetpackcompose.domain.model.Todo
 
 interface TodoRepository {
     suspend fun getTodos(listId: Int): List<Todo>
+    suspend fun toggleTodoComplete(todoId: Int)
 }
