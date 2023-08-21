@@ -2,20 +2,22 @@ package com.example.todojetpackcompose.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.todojetpackcompose.common.TextFormField
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginView(
     loginViewModel: LoginViewModel = hiltViewModel()
@@ -28,25 +30,37 @@ fun LoginView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(
+        Text(
+            text = "Login",
+            style = TextStyle(
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextFormField(
             value = state.username,
             onValueChange = { loginViewModel.onEvent(LoginEvent.EnteredUsername(it)) },
-            label = { Text("Username") },
-            singleLine = true
+            label = "Username"
         )
-        OutlinedTextField(
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextFormField(
             value = state.password,
             onValueChange = { loginViewModel.onEvent(LoginEvent.EnteredPassword(it)) },
-            label = { Text("Password") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
-            visualTransformation = PasswordVisualTransformation()
+            label = "Password",
+            isPassword = true
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         Button(
             onClick = { loginViewModel.onEvent(LoginEvent.Login) },
             enabled = !state.disableLoginButton,
+            modifier = Modifier.fillMaxWidth(0.6f)
         ) {
             Text("Login")
         }
