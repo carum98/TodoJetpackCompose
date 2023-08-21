@@ -10,4 +10,7 @@ data class ListState(
 
 sealed class ListEvent {
     object GetLists: ListEvent()
+    data class DeleteList(val id: Int): ListEvent()
+    data class UpdateList(val id: Int, val name: String, val color: String): ListEvent()
+    data class CreateList(val name: String, val color: String): ListEvent()
 }

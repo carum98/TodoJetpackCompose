@@ -25,6 +25,15 @@ class ListsViewModel @Inject constructor(
             is ListEvent.GetLists -> {
                 getLists()
             }
+            is ListEvent.DeleteList -> {
+                deleteList(event.id)
+            }
+            is ListEvent.UpdateList -> {
+                updateList(event)
+            }
+            is ListEvent.CreateList -> {
+                createList(event)
+            }
         }
     }
 
@@ -56,5 +65,21 @@ class ListsViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun addList() {
+        TODO()
+    }
+
+    private fun deleteList(listId: Int) {
+        println("Delete list $listId")
+    }
+
+    private fun updateList(params: ListEvent.UpdateList) {
+        println("Update list $params")
+    }
+
+    private fun createList(params: ListEvent.CreateList) {
+        println("Create list $params")
     }
 }

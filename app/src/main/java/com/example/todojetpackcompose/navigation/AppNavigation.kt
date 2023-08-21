@@ -44,9 +44,6 @@ fun AppNavigation() {
 
         composable(AppScreen.Lists.route) {
             ListsView(
-                onAddList = {
-                    println("Add list")
-                },
                 onOpenList = {
                     navController.navigate(AppScreen.Todo.route + "/$it")
                 }

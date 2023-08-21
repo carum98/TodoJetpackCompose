@@ -1,6 +1,5 @@
 package com.example.todojetpackcompose.presentation.lists
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,36 +13,77 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.todojetpackcompose.R
+import com.example.todojetpackcompose.common.TheConfirmDialog
+import com.example.todojetpackcompose.common.TheDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListsView(
     listsViewModel: ListsViewModel = hiltViewModel(),
-    onAddList: () -> Unit,
     onOpenList: (Int) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val state = listsViewModel.state.value
 
-    // Get lists
+    val showDialog = remember { mutableStateOf(false) }
+    val showAlertDialog = remember { mutableStateOf(false) }
+    val selectedId = remember { mutableStateOf<Int?>(null) }
+
     LaunchedEffect(null) {
         if (state.lists.isEmpty()) {
             println("Get lists")
             listsViewModel.onEvent(ListEvent.GetLists)
         }
+    }
+
+    if (showDialog.value) {
+        TheDialog(
+            onDismissRequest = {
+                showDialog.value = false
+                selectedId.value = null
+            }
+        ) { onDismiss ->
+            ListFormView(
+                onConfirm = { name, color ->
+                    if (selectedId.value != null) {
+                        listsViewModel.onEvent(ListEvent.UpdateList(selectedId.value!!, name, color))
+                    } else {
+                        listsViewModel.onEvent(ListEvent.CreateList(name, color))
+                    }
+
+                    onDismiss()
+                }
+            )
+        }
+    }
+
+    if (showAlertDialog.value) {
+        TheConfirmDialog(
+            title = "Delete list",
+            description = "Are you sure you want to delete this list?",
+            onDismiss = {
+                showAlertDialog.value = false
+                selectedId.value = null
+            },
+            onConfirm = {
+                showAlertDialog.value = false
+                if (selectedId.value != null) {
+                    listsViewModel.onEvent(ListEvent.DeleteList(selectedId.value!!))
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -65,7 +105,7 @@ fun ListsView(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                onAddList()
+                showDialog.value = true
             }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add list")
             }
@@ -74,21 +114,17 @@ fun ListsView(
         Box(modifier = Modifier.padding(contentPadding)) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.lists) { list ->
-                    ListItem(
-                        headlineText = {
-                            Text(text = list.name)
+                    ListTile(
+                        list = list,
+                        onOpenList = onOpenList,
+                        onDelete = {
+                            selectedId.value = it
+                            showAlertDialog.value = true
                         },
-                        leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.baseline_circle_24),
-                                contentDescription = "List icon",
-                                tint = list.color
-                            )
-                        },
-                        modifier = Modifier
-                            .clickable {
-                                onOpenList(list.id)
-                            }
+                        onUpdate = {
+                            selectedId.value = it
+                            showDialog.value = true
+                        }
                     )
                 }
             }

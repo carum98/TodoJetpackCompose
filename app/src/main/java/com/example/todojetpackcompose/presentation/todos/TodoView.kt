@@ -71,7 +71,7 @@ fun TodoView(
                 items(state.todos) { todo ->
                     Column {
                         ListItem(
-                            headlineText = {
+                            headlineContent = {
                                 Text(text = todo.title)
                             },
                             leadingContent = {
