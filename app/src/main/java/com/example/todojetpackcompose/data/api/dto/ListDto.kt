@@ -2,6 +2,11 @@ package com.example.todojetpackcompose.data.api.dto
 
 import com.example.todojetpackcompose.domain.model.List as ListModel
 
+data class ListDtoRequest(
+    val name: String,
+    val color: String,
+)
+
 data class ListDto(
     val id: Int,
     val name: String,

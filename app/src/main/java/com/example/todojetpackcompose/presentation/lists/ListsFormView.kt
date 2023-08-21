@@ -22,7 +22,7 @@ fun ListFormView(
         )
 
         Button(onClick = {
-            onConfirm(name.value, "color")
+            onConfirm(name.value, "#283593")
         }) {
             Text("Confirm")
         }
