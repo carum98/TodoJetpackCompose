@@ -1,10 +1,11 @@
 package com.example.todojetpackcompose.di
 
-import com.example.todojetpackcompose.data.api.AuthInterceptor
+import com.example.todojetpackcompose.data.api.interceptors.AuthInterceptor
 import com.example.todojetpackcompose.data.api.AuthService
 import com.example.todojetpackcompose.data.api.ListService
-import com.example.todojetpackcompose.data.api.NoAuthInterceptor
+import com.example.todojetpackcompose.data.api.interceptors.NoAuthInterceptor
 import com.example.todojetpackcompose.data.api.TodoService
+import com.example.todojetpackcompose.data.api.interceptors.Code204Interceptor
 import com.example.todojetpackcompose.data.repository.AuthRepositoryImpl
 import com.example.todojetpackcompose.data.repository.ListRepositoryImpl
 import com.example.todojetpackcompose.data.repository.TodoRepositoryImpl
@@ -28,10 +29,12 @@ class AppModule {
     fun provideRetrofit(
         authInterceptor: AuthInterceptor,
         noAuthInterceptor: NoAuthInterceptor,
+        code204Interceptor: Code204Interceptor,
     ): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(noAuthInterceptor)
+            .addInterceptor(code204Interceptor)
             .build()
 
         return Retrofit.Builder()

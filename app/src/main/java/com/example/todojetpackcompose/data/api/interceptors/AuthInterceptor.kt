@@ -1,4 +1,4 @@
-package com.example.todojetpackcompose.data.api
+package com.example.todojetpackcompose.data.api.interceptors
 
 import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import kotlinx.coroutines.Dispatchers
