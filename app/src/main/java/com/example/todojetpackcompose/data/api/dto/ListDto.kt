@@ -1,11 +1,15 @@
 package com.example.todojetpackcompose.data.api.dto
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.example.todojetpackcompose.domain.model.List as ListModel
 
 data class ListDtoRequest(
     val name: String,
-    val color: String,
-)
+    private val colorInstance: Color,
+)  {
+    val color: String = String.format("#%06X", 0xFFFFFF and colorInstance.toArgb())
+}
 
 data class ListDto(
     val id: Int,

@@ -1,5 +1,6 @@
 package com.example.todojetpackcompose.domain.use_case
 
+import androidx.compose.ui.graphics.Color
 import com.example.todojetpackcompose.common.Resource
 import com.example.todojetpackcompose.domain.repository.ListRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,7 @@ import com.example.todojetpackcompose.domain.model.List as ListModel
 class UpdateListUseCase @Inject constructor(
     private val listRepository: ListRepository
 ) {
-    operator fun invoke(listId: Int, name: String, color: String): Flow<Resource<ListModel>> = flow {
+    operator fun invoke(listId: Int, name: String, color: Color): Flow<Resource<ListModel>> = flow {
         try {
             emit(Resource.Loading())
             val response = listRepository.updateList(listId, name, color)

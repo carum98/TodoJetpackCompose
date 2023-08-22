@@ -1,5 +1,6 @@
 package com.example.todojetpackcompose.data.repository
 
+import androidx.compose.ui.graphics.Color
 import com.example.todojetpackcompose.data.api.ListService
 import com.example.todojetpackcompose.data.api.dto.ListDtoRequest
 import com.example.todojetpackcompose.data.api.dto.toList
@@ -15,13 +16,13 @@ class ListRepositoryImpl @Inject constructor(
         return listDto.data.map { it.toList() }
     }
 
-    override suspend fun createList(name: String, color: String): ListModel {
+    override suspend fun createList(name: String, color: Color): ListModel {
         val listDto = listService.createList(ListDtoRequest(name, color))
 
         return listDto.toList()
     }
 
-    override suspend fun updateList(listId: Int, name: String, color: String): ListModel {
+    override suspend fun updateList(listId: Int, name: String, color: Color): ListModel {
         val listDto = listService.updateList(listId, ListDtoRequest(name, color))
 
         return listDto.toList()

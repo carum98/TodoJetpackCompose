@@ -10,23 +10,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.todojetpackcompose.common.ColorPicker
 import com.example.todojetpackcompose.common.TextFormField
 
 @Composable
 fun ListFormView(
-    onConfirm: (String, String) -> Unit
+    onConfirm: (String, Color) -> Unit
 ) {
     val name = remember { mutableStateOf("") }
-    val color = remember { mutableStateOf("#283593") }
+    val color = remember { mutableStateOf(Color(0xFFf43b30)) }
 
-    val isEnable = name.value.isNotEmpty() && color.value.isNotEmpty()
+    val isEnable = name.value.isNotEmpty()
 
     Column {
         TextFormField(
             value = name.value,
             onValueChange = { name.value = it },
             label = "Name"
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        ColorPicker(
+            value = color.value,
+            onValueChange = { color.value = it }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
