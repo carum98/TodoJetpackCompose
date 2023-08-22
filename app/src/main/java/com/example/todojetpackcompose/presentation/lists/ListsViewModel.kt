@@ -22,7 +22,6 @@ class ListsViewModel @Inject constructor(
     private val addListUseCase: AddListUseCase,
     private val updateListUseCase: UpdateListUseCase,
     private val removeListUseCase: RemoveListUseCase,
-    private val authenticationService: AuthenticationService
 ): ViewModel() {
     private val _state = mutableStateOf(ListState())
     val state: State<ListState> = _state
@@ -42,10 +41,6 @@ class ListsViewModel @Inject constructor(
                 createList(event)
             }
         }
-    }
-
-    suspend fun logout() {
-        authenticationService.onLogout()
     }
 
     private fun getLists() {

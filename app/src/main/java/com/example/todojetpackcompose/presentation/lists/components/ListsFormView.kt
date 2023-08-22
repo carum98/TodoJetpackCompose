@@ -1,4 +1,4 @@
-package com.example.todojetpackcompose.presentation.lists
+package com.example.todojetpackcompose.presentation.lists.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

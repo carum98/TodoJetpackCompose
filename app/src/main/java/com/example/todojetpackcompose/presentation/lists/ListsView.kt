@@ -7,12 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -20,13 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todojetpackcompose.common.TheConfirmDialog
 import com.example.todojetpackcompose.common.TheDialog
-import kotlinx.coroutines.launch
+import com.example.todojetpackcompose.presentation.lists.components.ListFormView
+import com.example.todojetpackcompose.presentation.lists.components.ListTile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +32,6 @@ fun ListsView(
     listsViewModel: ListsViewModel = hiltViewModel(),
     onOpenList: (Int) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     val state = listsViewModel.state.value
 
     val showDialog = remember { mutableStateOf(false) }
@@ -91,15 +88,6 @@ fun ListsView(
             TopAppBar(
                 title = {
                     Text("ToDo App")
-                },
-                actions = {
-                    IconButton(onClick = {
-                        scope.launch {
-                            listsViewModel.logout()
-                        }
-                    }) {
-                        Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = "Más")
-                    }
                 }
             )
         },
