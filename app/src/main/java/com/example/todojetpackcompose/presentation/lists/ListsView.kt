@@ -16,8 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,7 +23,6 @@ import com.example.todojetpackcompose.common.TheConfirmDialog
 import com.example.todojetpackcompose.common.TheDialog
 import com.example.todojetpackcompose.presentation.lists.components.ListFormView
 import com.example.todojetpackcompose.presentation.lists.components.ListTile
-import com.example.todojetpackcompose.domain.model.List as ListModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,10 +32,6 @@ fun ListsView(
 ) {
     val state = listsViewModel.state.value
 
-    val showDialog = remember { mutableStateOf(false) }
-    val showAlertDialog = remember { mutableStateOf(false) }
-    val selectedId = remember { mutableStateOf<ListModel?>(null) }
-
     LaunchedEffect(null) {
         if (state.lists.isEmpty()) {
             println("Get lists")
@@ -46,23 +39,24 @@ fun ListsView(
         }
     }
 
-    if (showDialog.value) {
+    if (state.showDialog) {
         TheDialog(
             onDismissRequest = {
-                showDialog.value = false
-                selectedId.value = null
+                listsViewModel.onEvent(ListEvent.CloseDialogs)
             }
         ) { onDismiss ->
             ListFormView(
-                initialName = selectedId.value?.name,
-                initialColor = selectedId.value?.color,
-                buttonText = if (selectedId.value != null) "Update" else "Create",
+                initialName = state.listSelected?.name,
+                initialColor = state.listSelected?.color,
+                buttonText = if (state.listSelected != null) "Update" else "Create",
                 onConfirm = { name, color ->
-                    if (selectedId.value != null) {
-                        listsViewModel.onEvent(ListEvent.UpdateList(selectedId.value!!.id, name, color))
-                    } else {
-                        listsViewModel.onEvent(ListEvent.CreateList(name, color))
-                    }
+                    listsViewModel.onEvent(
+                        if (state.listSelected != null) {
+                            ListEvent.UpdateList(state.listSelected.id, name, color)
+                        } else {
+                            ListEvent.CreateList(name, color)
+                        }
+                    )
 
                     onDismiss()
                 }
@@ -70,19 +64,15 @@ fun ListsView(
         }
     }
 
-    if (showAlertDialog.value) {
+    if (state.showAlertDialog) {
         TheConfirmDialog(
             title = "Delete list",
             description = "Are you sure you want to delete this list?",
             onDismiss = {
-                showAlertDialog.value = false
-                selectedId.value = null
+                listsViewModel.onEvent(ListEvent.CloseDialogs)
             },
             onConfirm = {
-                showAlertDialog.value = false
-                if (selectedId.value != null) {
-                    listsViewModel.onEvent(ListEvent.DeleteList(selectedId.value!!.id))
-                }
+                listsViewModel.onEvent(ListEvent.DeleteList(state.listSelected!!.id))
             }
         )
     }
@@ -97,7 +87,7 @@ fun ListsView(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                showDialog.value = true
+                listsViewModel.onEvent(ListEvent.OpenDialogCreateList)
             }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add list")
             }
@@ -110,12 +100,10 @@ fun ListsView(
                         list = list,
                         onOpenList = onOpenList,
                         onDelete = {
-                            selectedId.value = it
-                            showAlertDialog.value = true
+                            listsViewModel.onEvent(ListEvent.OpenDialogDeleteList(it))
                         },
                         onUpdate = {
-                            selectedId.value = it
-                            showDialog.value = true
+                            listsViewModel.onEvent(ListEvent.OpenDialogUpdateList(it))
                         }
                     )
                 }

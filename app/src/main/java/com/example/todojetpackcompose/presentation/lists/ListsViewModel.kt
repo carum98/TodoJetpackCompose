@@ -8,7 +8,6 @@ import com.example.todojetpackcompose.domain.use_case.GetListsUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import com.example.todojetpackcompose.common.Resource
-import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import com.example.todojetpackcompose.domain.use_case.AddListUseCase
 import com.example.todojetpackcompose.domain.use_case.RemoveListUseCase
 import com.example.todojetpackcompose.domain.use_case.UpdateListUseCase
@@ -39,6 +38,30 @@ class ListsViewModel @Inject constructor(
             }
             is ListEvent.CreateList -> {
                 createList(event)
+            }
+            ListEvent.CloseDialogs -> {
+                _state.value = state.value.copy(
+                    showDialog = false,
+                    showAlertDialog = false,
+                    listSelected = null
+                )
+            }
+            ListEvent.OpenDialogCreateList -> {
+                _state.value = state.value.copy(
+                    showDialog = true
+                )
+            }
+            is ListEvent.OpenDialogDeleteList -> {
+                _state.value = state.value.copy(
+                    showAlertDialog = true,
+                    listSelected = event.list
+                )
+            }
+            is ListEvent.OpenDialogUpdateList -> {
+                _state.value = state.value.copy(
+                    showDialog = true,
+                    listSelected = event.list
+                )
             }
         }
     }
