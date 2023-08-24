@@ -3,6 +3,12 @@ package com.example.todojetpackcompose.data.api.dto
 import com.example.todojetpackcompose.domain.model.Todo
 import com.google.gson.annotations.SerializedName
 
+data class TodoDtoRequest(
+    val title: String,
+    @SerializedName("list_id")
+    val listId: Int?,
+)
+
 data class TodoDto(
     val id: Int,
     val title: String,

@@ -1,6 +1,7 @@
 package com.example.todojetpackcompose.data.repository
 
 import com.example.todojetpackcompose.data.api.TodoService
+import com.example.todojetpackcompose.data.api.dto.TodoDtoRequest
 import com.example.todojetpackcompose.data.api.dto.toTodo
 import com.example.todojetpackcompose.domain.model.Todo
 import com.example.todojetpackcompose.domain.repository.TodoRepository
@@ -15,7 +16,27 @@ class TodoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun toggleTodoComplete(todoId: Int) {
-        println("todoIt is $todoId")
         todoService.toggleTodoComplete(todoId)
+    }
+
+    override suspend fun createTodo(title: String, listId: Int): Todo {
+        val todoDto = todoService.createTodo(
+            TodoDtoRequest(title, listId)
+        )
+
+        return todoDto.toTodo()
+    }
+
+    override suspend fun updateTodo(todoId: Int, title: String): Todo {
+        val todoDto = todoService.updateTodoTitle(
+            todoId,
+            TodoDtoRequest(title, null)
+        )
+
+        return todoDto.toTodo()
+    }
+
+    override suspend fun deleteTodo(todoId: Int) {
+        todoService.deleteTodos(todoId)
     }
 }

@@ -57,9 +57,6 @@ fun AppNavigation() {
             TodoView(
                 onBack = {
                     navController.popBackStack()
-                },
-                onAddTodo = {
-                    println("Add todo")
                 }
             )
         }
