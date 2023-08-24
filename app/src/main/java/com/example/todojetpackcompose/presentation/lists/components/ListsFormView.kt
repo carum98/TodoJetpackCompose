@@ -17,10 +17,13 @@ import com.example.todojetpackcompose.common.TextFormField
 
 @Composable
 fun ListFormView(
+    initialName: String?,
+    initialColor: Color?,
+    buttonText: String,
     onConfirm: (String, Color) -> Unit
 ) {
-    val name = remember { mutableStateOf("") }
-    val color = remember { mutableStateOf(Color(0xFFf43b30)) }
+    val name = remember { mutableStateOf(initialName ?: "") }
+    val color = remember { mutableStateOf(initialColor ?: Color(0xFFf43b30)) }
 
     val isEnable = name.value.isNotEmpty()
 
@@ -47,7 +50,7 @@ fun ListFormView(
             enabled = isEnable,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Create")
+            Text(buttonText)
         }
     }
 }

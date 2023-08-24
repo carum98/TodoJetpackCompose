@@ -32,15 +32,15 @@ import com.example.todojetpackcompose.domain.model.List as ListModel
 fun ListTile(
     list: ListModel,
     onOpenList: (Int) -> Unit,
-    onDelete: (Int) -> Unit,
-    onUpdate: (Int) -> Unit
+    onDelete: (ListModel) -> Unit,
+    onUpdate: (ListModel) -> Unit
 ) {
     SwipeActions(
         onDelete = {
-            onDelete(list.id)
+            onDelete(list)
         },
         onUpdate = {
-            onUpdate(list.id)
+            onUpdate(list)
         }
     ) {
         ListItem(

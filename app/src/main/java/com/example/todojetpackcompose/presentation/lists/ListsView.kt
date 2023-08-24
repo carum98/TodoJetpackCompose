@@ -25,6 +25,7 @@ import com.example.todojetpackcompose.common.TheConfirmDialog
 import com.example.todojetpackcompose.common.TheDialog
 import com.example.todojetpackcompose.presentation.lists.components.ListFormView
 import com.example.todojetpackcompose.presentation.lists.components.ListTile
+import com.example.todojetpackcompose.domain.model.List as ListModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +37,7 @@ fun ListsView(
 
     val showDialog = remember { mutableStateOf(false) }
     val showAlertDialog = remember { mutableStateOf(false) }
-    val selectedId = remember { mutableStateOf<Int?>(null) }
+    val selectedId = remember { mutableStateOf<ListModel?>(null) }
 
     LaunchedEffect(null) {
         if (state.lists.isEmpty()) {
@@ -53,9 +54,12 @@ fun ListsView(
             }
         ) { onDismiss ->
             ListFormView(
+                initialName = selectedId.value?.name,
+                initialColor = selectedId.value?.color,
+                buttonText = if (selectedId.value != null) "Update" else "Create",
                 onConfirm = { name, color ->
                     if (selectedId.value != null) {
-                        listsViewModel.onEvent(ListEvent.UpdateList(selectedId.value!!, name, color))
+                        listsViewModel.onEvent(ListEvent.UpdateList(selectedId.value!!.id, name, color))
                     } else {
                         listsViewModel.onEvent(ListEvent.CreateList(name, color))
                     }
@@ -77,7 +81,7 @@ fun ListsView(
             onConfirm = {
                 showAlertDialog.value = false
                 if (selectedId.value != null) {
-                    listsViewModel.onEvent(ListEvent.DeleteList(selectedId.value!!))
+                    listsViewModel.onEvent(ListEvent.DeleteList(selectedId.value!!.id))
                 }
             }
         )
