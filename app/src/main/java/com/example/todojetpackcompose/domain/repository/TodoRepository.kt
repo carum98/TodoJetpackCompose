@@ -8,4 +8,5 @@ interface TodoRepository {
     suspend fun createTodo(title: String, listId: Int): Todo
     suspend fun updateTodo(todoId: Int, title: String): Todo
     suspend fun deleteTodo(todoId: Int)
+    suspend fun moveTodo(todoId: Int, toIndex: Int): List<Todo>
 }

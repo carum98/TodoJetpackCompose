@@ -1,5 +1,10 @@
 package com.example.todojetpackcompose.presentation.todos
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,20 +27,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todojetpackcompose.common.TheConfirmDialog
 import com.example.todojetpackcompose.common.TheDialog
 import com.example.todojetpackcompose.presentation.todos.components.TodoForm
 import com.example.todojetpackcompose.presentation.todos.components.TodoTile
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun TodoView(
     todoViewModel: TodoViewModel = hiltViewModel(),
     onBack: () -> Unit,
 ) {
     val state = todoViewModel.state.value
+
+    val stateLazyColumn = rememberReorderableLazyListState(onMove = { from, to ->
+        todoViewModel.onEvent(TodoEvent.MoveTodo(
+            fromIndex = from.index,
+            toIndex = to.index,
+        ))
+    })
 
     LaunchedEffect(null) {
         todoViewModel.onEvent(TodoEvent.GetTodos)
@@ -102,24 +120,41 @@ fun TodoView(
             .padding(contentPadding)
             .padding(15.dp, 0.dp)
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(state.todos) { todo ->
-                    Column {
-                        TodoTile(
-                            todo = todo,
-                            onToggleTodo = {
-                                todoViewModel.onEvent(TodoEvent.ToggleTodo(it))
-                            },
-                            onDelete = {
-                                todoViewModel.onEvent(TodoEvent.OpenDialogDeleteTodo(it))
-                            },
-                            onUpdate = {
-                                todoViewModel.onEvent(TodoEvent.OpenDialogUpdateTodo(it))
-                            }
+            LazyColumn(
+                state = stateLazyColumn.listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .reorderable(stateLazyColumn)
+            ) {
+                items(state.todos, { it.id }) { todo ->
+                    ReorderableItem(stateLazyColumn, key = todo.id) { isDragging ->
+                        val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp,
+                            label = ""
                         )
 
-                        if (state.todos.last() != todo) {
-                            Divider()
+                        Column(
+                            modifier = Modifier
+                                .shadow(elevation.value)
+                                .background(Color.Red)
+                                .detectReorderAfterLongPress(stateLazyColumn)
+                                .animateItemPlacement( animationSpec = tween( durationMillis = 100, easing = FastOutSlowInEasing ) )
+                        ) {
+                            TodoTile(
+                                todo = todo,
+                                onToggleTodo = {
+                                    todoViewModel.onEvent(TodoEvent.ToggleTodo(it))
+                                },
+                                onDelete = {
+                                    todoViewModel.onEvent(TodoEvent.OpenDialogDeleteTodo(it))
+                                },
+                                onUpdate = {
+                                    todoViewModel.onEvent(TodoEvent.OpenDialogUpdateTodo(it))
+                                }
+                            )
+
+                            if (state.todos.last() != todo) {
+                                Divider()
+                            }
                         }
                     }
                 }

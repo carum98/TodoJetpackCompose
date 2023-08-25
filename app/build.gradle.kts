@@ -86,6 +86,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 }
 
 // Allow references to generated code

@@ -9,6 +9,7 @@ import com.example.todojetpackcompose.common.Resource
 import com.example.todojetpackcompose.domain.model.Todo
 import com.example.todojetpackcompose.domain.use_case.AddTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.GetTodosUseCase
+import com.example.todojetpackcompose.domain.use_case.MoveTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.RemoveTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.ToggleTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.UpdateTodoUseCase
@@ -26,6 +27,7 @@ class TodoViewModel @Inject constructor(
     private val removeTodoUseCase: RemoveTodoUseCase,
     private val updateTodoUseCase: UpdateTodoUseCase,
     private val addTodoUseCase: AddTodoUseCase,
+    private val moveTodoUseCase: MoveTodoUseCase,
 ): ViewModel() {
     private val _state = mutableStateOf(TodoState())
     val state: State<TodoState> = _state
@@ -74,6 +76,15 @@ class TodoViewModel @Inject constructor(
                     showAlertDialog = false,
                     todoSelected = null
                 )
+            }
+            is TodoEvent.MoveTodo -> {
+                _state.value = state.value.copy(
+                    todos = state.value.todos.toMutableList().apply {
+                        add(event.toIndex, removeAt(event.fromIndex))
+                    }
+                )
+
+                moveTodo(event)
             }
         }
     }
@@ -175,5 +186,10 @@ class TodoViewModel @Inject constructor(
 
             _state.value = state.value.copy(todos = newTodos)
         }
+    }
+
+    private fun moveTodo(params: TodoEvent.MoveTodo) {
+        val todo = state.value.todos[params.toIndex]
+        moveTodoUseCase(todo.id, params.toIndex).launchIn(viewModelScope)
     }
 }

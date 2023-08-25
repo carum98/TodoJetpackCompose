@@ -39,4 +39,13 @@ class TodoRepositoryImpl @Inject constructor(
     override suspend fun deleteTodo(todoId: Int) {
         todoService.deleteTodos(todoId)
     }
+
+    override suspend fun moveTodo(todoId: Int, toIndex: Int): List<Todo> {
+        val todoDto = todoService.moveTodo(
+            todoId,
+            toIndex
+        )
+
+        return todoDto.data.map { it.toTodo() }
+    }
 }

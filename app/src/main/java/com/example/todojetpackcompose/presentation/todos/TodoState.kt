@@ -21,4 +21,5 @@ sealed class TodoEvent {
     data class OpenDialogUpdateTodo(val todo: Todo): TodoEvent()
     data class OpenDialogDeleteTodo(val todo: Todo): TodoEvent()
     object CloseDialogs: TodoEvent()
+    data class MoveTodo(val fromIndex: Int, val toIndex: Int): TodoEvent()
 }

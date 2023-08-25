@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TodoService {
     @GET("lists/{listId}/todos")
@@ -25,4 +26,10 @@ interface TodoService {
 
     @POST("todos/{todoId}/toggle")
     suspend fun toggleTodoComplete(@Path("todoId") todoId: Int)
+
+    @POST("todos/{todoId}/move")
+    suspend fun moveTodo(
+        @Path("todoId") todoId: Int,
+        @Query("position") toIndex: Int
+    ): TodoDataDto
 }
