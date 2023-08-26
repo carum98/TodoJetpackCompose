@@ -3,10 +3,13 @@ package com.example.todojetpackcompose.presentation.lists.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -14,6 +17,7 @@ import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
@@ -21,10 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.todojetpackcompose.R
 import com.example.todojetpackcompose.domain.model.List as ListModel
 
@@ -45,19 +51,35 @@ fun ListTile(
     ) {
         ListItem(
             headlineContent = {
-                Text(text = list.name)
+                Text(
+                    text = list.name,
+                    fontSize = 20.sp,
+                )
             },
             leadingContent = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_circle_24),
                     contentDescription = "List icon",
-                    tint = list.color
+                    tint = list.color,
+                    modifier = Modifier
+                        .size(18.dp)
+                        .border(
+                            width = 0.5.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(50)
+                        )
                 )
             },
             modifier = Modifier
                 .clickable {
                     onOpenList(list.id)
                 }
+                .clip(
+                    shape = RoundedCornerShape(20.dp)
+                ),
+            colors = ListItemDefaults.colors(
+                containerColor = Color(0xFF3b3e45)
+            )
         )
     }
 }
