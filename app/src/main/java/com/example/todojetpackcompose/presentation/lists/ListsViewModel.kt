@@ -131,7 +131,7 @@ class ListsViewModel @Inject constructor(
                 is Resource.Success -> {
                     result.data?.let { list ->
                         _state.value = state.value.copy(
-                            lists = state.value.lists + list,
+                            lists = listOf(list) + state.value.lists,
                             isLoading = false
                         )
                     }
