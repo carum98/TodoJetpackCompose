@@ -7,8 +7,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -69,6 +72,24 @@ fun ListTile(
                             shape = RoundedCornerShape(50)
                         )
                 )
+            },
+            trailingContent = {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = Color.Black.copy(alpha = 0.4f),
+                            shape = RoundedCornerShape(50)
+                        )
+                        .width(25.dp)
+                        .height(25.dp)
+                        .alpha(0.5f),
+                ) {
+                    Text(
+                        text = list.count.toString(),
+                        fontSize = 15.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
             },
             modifier = Modifier
                 .clickable {

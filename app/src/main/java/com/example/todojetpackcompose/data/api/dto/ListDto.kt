@@ -15,10 +15,17 @@ data class ListDto(
     val id: Int,
     val name: String,
     val color: String,
+    val count: CountDto,
 )
 
 data class ListDataDto(
     val data: List<ListDto>
+)
+
+data class CountDto(
+    val completed: Int,
+    val pending: Int,
+    val total: Int,
 )
 
 fun ListDto.toList(): ListModel {
@@ -26,5 +33,6 @@ fun ListDto.toList(): ListModel {
         id = id,
         name = name,
         colorHexadecimal = color,
+        count = count.pending,
     )
 }

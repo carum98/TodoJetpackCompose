@@ -20,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todojetpackcompose.common.TheConfirmDialog
 import com.example.todojetpackcompose.common.TheDialog
 import com.example.todojetpackcompose.presentation.lists.components.ListFormView
@@ -29,7 +28,7 @@ import com.example.todojetpackcompose.presentation.lists.components.ListTile
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListsView(
-    listsViewModel: ListsViewModel = hiltViewModel(),
+    listsViewModel: ListsViewModel,
     onOpenList: (Int) -> Unit
 ) {
     val state = listsViewModel.state.value

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +13,7 @@ import androidx.navigation.navArgument
 import com.example.todojetpackcompose.data.datastore.AuthenticationService
 import com.example.todojetpackcompose.data.datastore.AuthenticationService.Companion.datastore
 import com.example.todojetpackcompose.presentation.lists.ListsView
+import com.example.todojetpackcompose.presentation.lists.ListsViewModel
 import com.example.todojetpackcompose.presentation.login.LoginView
 import com.example.todojetpackcompose.presentation.todos.TodoView
 import kotlinx.coroutines.flow.launchIn
@@ -23,6 +25,8 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    val listsViewModel: ListsViewModel = hiltViewModel()
 
     LaunchedEffect(null) {
         context.datastore.data
@@ -44,6 +48,7 @@ fun AppNavigation() {
 
         composable(AppScreen.Lists.route) {
             ListsView(
+                listsViewModel = listsViewModel,
                 onOpenList = {
                     navController.navigate(AppScreen.Todo.route + "/$it")
                 }
@@ -55,6 +60,7 @@ fun AppNavigation() {
             arguments = listOf(navArgument("listId") { type = NavType.IntType })
         ) {
             TodoView(
+                listsViewModel = listsViewModel,
                 onBack = {
                     navController.popBackStack()
                 }

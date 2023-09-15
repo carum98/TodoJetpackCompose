@@ -7,6 +7,7 @@ data class List(
     val id: Int,
     val name: String,
     private val colorHexadecimal: String,
+    val count: Int,
 ) {
     val color: Color = Color(parseColor(colorHexadecimal))
 }

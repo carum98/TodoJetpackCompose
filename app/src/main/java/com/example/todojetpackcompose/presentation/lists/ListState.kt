@@ -21,4 +21,5 @@ sealed class ListEvent {
     data class OpenDialogUpdateList(val list: ListModel): ListEvent()
     data class OpenDialogDeleteList(val list: ListModel): ListEvent()
     object CloseDialogs: ListEvent()
+    data class UpdateCount(val id: Int, val value: Int): ListEvent()
 }

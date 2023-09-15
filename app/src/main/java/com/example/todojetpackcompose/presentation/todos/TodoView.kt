@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todojetpackcompose.common.TheConfirmDialog
 import com.example.todojetpackcompose.common.TheDialog
+import com.example.todojetpackcompose.presentation.lists.ListsViewModel
 import com.example.todojetpackcompose.presentation.todos.components.TodoForm
 import com.example.todojetpackcompose.presentation.todos.components.TodoTile
 import org.burnoutcrew.reorderable.ReorderableItem
@@ -44,6 +45,7 @@ import org.burnoutcrew.reorderable.reorderable
 @Composable
 fun TodoView(
     todoViewModel: TodoViewModel = hiltViewModel(),
+    listsViewModel: ListsViewModel,
     onBack: () -> Unit,
 ) {
     val state = todoViewModel.state.value
@@ -56,6 +58,7 @@ fun TodoView(
     })
 
     LaunchedEffect(null) {
+        todoViewModel.setup(listsViewModel)
         todoViewModel.onEvent(TodoEvent.GetTodos)
     }
 

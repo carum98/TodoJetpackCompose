@@ -13,6 +13,8 @@ import com.example.todojetpackcompose.domain.use_case.MoveTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.RemoveTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.ToggleTodoUseCase
 import com.example.todojetpackcompose.domain.use_case.UpdateTodoUseCase
+import com.example.todojetpackcompose.presentation.lists.ListEvent
+import com.example.todojetpackcompose.presentation.lists.ListsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,20 +34,27 @@ class TodoViewModel @Inject constructor(
     private val _state = mutableStateOf(TodoState())
     val state: State<TodoState> = _state
 
+    private var listId: Int? = null
+    private var listViewModel: ListsViewModel? = null
+
+    fun setup(listViewModel: ListsViewModel) {
+        savedStateHandle.get<Int>("listId")?.let { listId ->
+            this.listId = listId
+        }
+
+        this.listViewModel = listViewModel
+    }
+
     fun onEvent(event: TodoEvent) {
         when (event) {
             is TodoEvent.GetTodos -> {
-                savedStateHandle.get<Int>("listId")?.let { listId ->
-                    getTodos(listId)
-                }
+                this.listId?.let { getTodos(it) }
             }
             is TodoEvent.ToggleTodo -> {
                 toggleTodo(event.todo)
             }
             is TodoEvent.CreateTodo -> {
-                savedStateHandle.get<Int>("listId")?.let { listId ->
-                    createTodo(event, listId)
-                }
+                this.listId?.let { createTodo(event, it) }
             }
             is TodoEvent.UpdateTodo -> {
                 updateTodo(event)
@@ -126,6 +135,8 @@ class TodoViewModel @Inject constructor(
                             todos = state.value.todos + todo,
                             isLoading = false
                         )
+
+                        listViewModel?.onEvent(ListEvent.UpdateCount(listId, 1))
                     }
                 }
                 is Resource.Error -> {
@@ -185,6 +196,8 @@ class TodoViewModel @Inject constructor(
             }
 
             _state.value = state.value.copy(todos = newTodos)
+
+            listViewModel?.onEvent(ListEvent.UpdateCount(listId!!, if (todo.isComplete) 1 else -1))
         }
     }
 

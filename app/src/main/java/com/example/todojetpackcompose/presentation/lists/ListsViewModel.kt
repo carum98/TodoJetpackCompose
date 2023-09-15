@@ -39,6 +39,9 @@ class ListsViewModel @Inject constructor(
             is ListEvent.CreateList -> {
                 createList(event)
             }
+            is ListEvent.UpdateCount -> {
+                updateCount(event)
+            }
             ListEvent.CloseDialogs -> {
                 _state.value = state.value.copy(
                     showDialog = false,
@@ -145,5 +148,12 @@ class ListsViewModel @Inject constructor(
                 is Resource.Loading -> {}
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun updateCount(params: ListEvent.UpdateCount) {
+        _state.value = state.value.copy(
+            lists = state.value.lists.map { if (it.id == params.id) it.copy(count = it.count + params.value) else it },
+            isLoading = false
+        )
     }
 }
