@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 // Allow references to generated code
