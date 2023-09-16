@@ -7,6 +7,12 @@ data class AuthDtoRequest(
     val password: String
 )
 
+data class AuthDtoRequestRegister(
+    val name: String,
+    val user_name: String,
+    val password: String
+)
+
 data class AuthDto(
     val token: String,
     val refreshToken: String,

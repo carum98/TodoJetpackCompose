@@ -15,6 +15,7 @@ import com.example.todojetpackcompose.data.datastore.AuthenticationService.Compa
 import com.example.todojetpackcompose.presentation.lists.ListsView
 import com.example.todojetpackcompose.presentation.lists.ListsViewModel
 import com.example.todojetpackcompose.presentation.login.LoginView
+import com.example.todojetpackcompose.presentation.register.RegisterView
 import com.example.todojetpackcompose.presentation.todos.TodoView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -43,7 +44,19 @@ fun AppNavigation() {
 
     NavHost(navController = navController, startDestination = AppScreen.Login.route) {
         composable(AppScreen.Login.route) {
-            LoginView()
+            LoginView(
+                onRegister = {
+                    navController.navigate(AppScreen.Register.route)
+                }
+            )
+        }
+
+        composable(AppScreen.Register.route) {
+            RegisterView(
+                onLogin = {
+                    navController.navigate(AppScreen.Login.route)
+                }
+            )
         }
 
         composable(AppScreen.Lists.route) {

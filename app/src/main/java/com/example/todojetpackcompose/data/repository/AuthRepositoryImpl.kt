@@ -2,6 +2,7 @@ package com.example.todojetpackcompose.data.repository
 
 import com.example.todojetpackcompose.data.api.AuthService
 import com.example.todojetpackcompose.data.api.dto.AuthDtoRequest
+import com.example.todojetpackcompose.data.api.dto.AuthDtoRequestRegister
 import com.example.todojetpackcompose.data.api.dto.toAuth
 import com.example.todojetpackcompose.domain.model.Auth
 import com.example.todojetpackcompose.domain.repository.AuthRepository
@@ -16,6 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun register(name: String, username: String, password: String): Auth {
-        TODO("Not yet implemented")
+        val authDto = authService.register(AuthDtoRequestRegister(name, username, password))
+        return authDto.toAuth()
     }
 }

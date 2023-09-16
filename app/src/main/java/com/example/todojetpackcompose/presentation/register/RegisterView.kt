@@ -1,4 +1,4 @@
-package com.example.todojetpackcompose.presentation.login
+package com.example.todojetpackcompose.presentation.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todojetpackcompose.common.TextFormField
 
 @Composable
-fun LoginView(
-    loginViewModel: LoginViewModel = hiltViewModel(),
-    onRegister: () -> Unit
+fun RegisterView(
+    loginViewModel: RegisterViewModel = hiltViewModel(),
+    onLogin: () -> Unit
 ) {
     val state = loginViewModel.state
 
@@ -33,7 +33,7 @@ fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Login",
+            text = "Register",
             style = TextStyle(
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold
@@ -43,8 +43,16 @@ fun LoginView(
         Spacer(modifier = Modifier.height(20.dp))
 
         TextFormField(
+            value = state.name,
+            onValueChange = { loginViewModel.onEvent(RegisterEvent.EnteredName(it)) },
+            label = "Name"
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextFormField(
             value = state.username,
-            onValueChange = { loginViewModel.onEvent(LoginEvent.EnteredUsername(it)) },
+            onValueChange = { loginViewModel.onEvent(RegisterEvent.EnteredUsername(it)) },
             label = "Username"
         )
 
@@ -52,7 +60,7 @@ fun LoginView(
 
         TextFormField(
             value = state.password,
-            onValueChange = { loginViewModel.onEvent(LoginEvent.EnteredPassword(it)) },
+            onValueChange = { loginViewModel.onEvent(RegisterEvent.EnteredPassword(it)) },
             label = "Password",
             isPassword = true
         )
@@ -60,15 +68,15 @@ fun LoginView(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { loginViewModel.onEvent(LoginEvent.Login) },
+            onClick = { loginViewModel.onEvent(RegisterEvent.Register) },
             enabled = !state.disableLoginButton,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Text("Login")
+            Text("Register")
         }
 
-        TextButton(onClick = onRegister) {
-            Text(text = "Register")
+        TextButton(onClick = onLogin) {
+            Text(text = "Login")
         }
     }
 }
