@@ -76,7 +76,8 @@ class ListsViewModel @Inject constructor(
                     result.data?.let { lists ->
                         _state.value = state.value.copy(
                             lists = lists,
-                            isLoading = false
+                            isLoading = false,
+                            error = ""
                         )
                     }
                 }
